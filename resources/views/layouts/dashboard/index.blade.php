@@ -16,9 +16,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
-    <meta name="author" content="Łukasz Holeczek">
-    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <meta name="description" content="@yield('description')">
+    <meta name="author" content="@yield('author')">
+    <meta name="keyword" content="@yield('keyword')">
     <title> @yield('page_title')</title>
     <link rel="apple-touch-icon" sizes="57x57"
         href="{{ asset('dist/dashboard/' . 'assets/favicon/apple-icon-57x57.png') }}">
@@ -84,10 +84,11 @@
     @livewireScripts
 
     <!-- Scripts -->
-    @vite(['resources/js/app.js'])
+    <script src="{{ asset('build/assets/app-19b098c9.js') }}" defer></script>
+    {{-- @vite(['resources/js/app.js']) --}}
 </head>
 
-<body data-turbolinks-track="reload">
+<body>
 
 
     @include('layouts.dashboard.components.sidebar')

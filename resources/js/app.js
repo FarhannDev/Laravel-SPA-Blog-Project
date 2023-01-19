@@ -1,2 +1,10 @@
 import Turbolinks from 'turbolinks';
-Turbolinks.start();
+
+if (Turbolinks.supported) {
+  Turbolinks.start();
+  Turbolinks.clearCache();
+  Turbolinks.setProgressBarDelay(10)
+}
+
+
+

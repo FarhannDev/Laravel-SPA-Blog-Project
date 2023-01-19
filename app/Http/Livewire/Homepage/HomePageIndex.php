@@ -10,30 +10,12 @@ use Livewire\Component;
 
 class HomePageIndex extends Component
 {
-  public $search;
-  public $category;
-  public $publish;
-  protected $queryString = [
-    'search' => ['except' => ''],
-  ];
 
   public function render(Request $request)
   {
-    $data = Post::with('category')
-      ->when($this->search, function (Builder $query) {
-        $query->where('post_title', 'like', '%' . $this->search . '%');
-      })
-      ->when($this->category, function (Builder $query) {
-        $query->whereHas('category', function (Builder $q) {
-          $q->where('category_name', $this->category);
-        });
-      })
-      ->when($this->publish, function (Builder $q) {
-        $q->where('publish_date', $this->publish);
-      })->latest()->paginate(20);
 
     return view('livewire.homepage.home-page-index', [
-      'posts' => $data,
+      'posts' => Post::where('status', 'publish')->paginate(20),
       'category_posts' => PostCategory::all(),
     ])
       ->extends('layouts.dashboard.index')

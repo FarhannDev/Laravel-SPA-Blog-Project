@@ -9,21 +9,22 @@ use Livewire\WithFileUploads;
 class ProfileEdit extends Component
 {
   use WithFileUploads;
+
   public $userId;
-  public $uuid;
   public $name;
-  public $username;
+  public $usname;
   public $email;
   public $avatar;
+  public $avatarOrigin;
   public $bio;
 
-  public $avatar_origin;
+  public $avatarName;
 
   protected $rules = [
-    'name'        => 'required|string|min:3|max:100',
-    'email'       => 'required|string|email',
-    'username'    => 'required|string|max:12',
-    'avatar'      => 'image|mimes:jpeg,jpg,png|max:2048'
+    'name' => 'required',
+    'email' => 'required|email',
+    'usname' => 'required',
+    'avatar' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
   ];
 
   public function updated($propertyName)
@@ -31,52 +32,48 @@ class ProfileEdit extends Component
     $this->validateOnly($propertyName);
   }
 
-  public function mount()
+
+  public function mount($username)
   {
-    $data = User::where('id', \Auth::user()->id)->first();
-    if (!is_null($data)) {
-      $this->userId         = $data['id'];
-      $this->uuid           = $data['uuid'];
-      $this->name           = $data['name'];
-      $this->username       = $data['username'];
-      $this->email          = $data['email'];
-      $this->avatar_origin  = asset('storage/avatar/' . $data['avatar']);
+    $data = User::where('username', $username)->first();
+
+    if ($data) {
+      $this->userId = $data->id;
+      $this->name = $data->name;
+      $this->email = $data->email;
+      $this->usname = $data->username;
+      $this->avatarOrigin = $data->avatar;
     }
   }
 
-  public function updateProfile()
-  {
 
+  public function ProfileUpdate()
+  {
     $this->validate();
 
-    $user = User::where('id', $this->userId)->first();
-    $user_avatar = null;
+    $user = User::findOrFail($this->userId);
 
     if ($this->avatar) {
-      \File::exists('storage/avatar/' . $user['avatar']);
-      \File::delete('storage/avatar/' . $user['avatar']);
+      \File::exists(public_path('avatar', $user->avatar));
+      \File::delete(public_path('avatar', $user->avatar));
 
-      $extension = \Str::lower($this->avatar->getClientOriginalExtension());
-      $user_avatar = 'author' . '-' . uniqid() . '.' . $extension;
-      $this->avatar = $this->avatar->storeAs('public/avatar', $user_avatar, 'local');
-    } else {
-      $user_avatar = $user['avatar'];
+      $avatarExtension = '.png';
+      $newAvatar = 'author-' . uniqid() . $avatarExtension;
+      $this->avatar->storeAs('storage/avatar', $newAvatar);
+      $this->avatarName = $newAvatar;
     }
 
     $user->update([
-      'uuid' => $this->uuid,
-      'name' => $this->name,
-      'username' => $this->username,
-      'email' => $this->email,
-      'avatar' => $user_avatar,
-      'updated_at' => new \DateTime()
+      'name'     => $this->name,
+      'username' => $this->usname,
+      'email'    => $this->email,
+      'avatar'   => $this->avatar ? $this->avatarName : $this->avatarOrigin,
+      'updated_at' => now()
     ]);
 
-    return redirect()
-      ->route('author.profile.index')
-      ->with('success', ' Profile updated successfully');
+    return redirect()->route('author.profile.index', $user->username)
+      ->with('success', 'Profile update was successful');
   }
-
 
   public function render()
   {

@@ -77,7 +77,7 @@
                                                         id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                                     <label class="form-check-label" for="remember">
-                                                        {{ __('Simpan Sesi Login Saya Untuk Berikutnya.') }}
+                                                        {{ __('Ingat Saya') }}
                                                     </label>
                                                 </div>
 

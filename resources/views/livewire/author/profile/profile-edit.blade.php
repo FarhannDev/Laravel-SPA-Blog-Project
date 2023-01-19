@@ -1,79 +1,83 @@
-<div>
-    <div class="card shadow rounded bg-white mb-3">
-        <div class="card-header">
-            <span>Profile Setting</span>
-        </div>
-        <div class="card-body">
-            <div class="profile-container">
-                <div class="d-flex flex-column">
-                    <div class="profile-avatar text-center mb-3">
-                        @if ($avatar)
-                            <img width="350" src="{{ $avatar->temporaryUrl() }}" class=" img-fluid rounded">
-                        @else
-                            <img width="350"
-                                src="{{ \Auth::user()->avatar ? $avatar_origin : asset('dist/dashboard/assets/img/avatars/9.jpg') }}"
-                                class=" img-fluid rounded" alt="{{ \Auth::user()->name }}">
-                        @endif
+    @section('page_title')
+        NgeBlogID
+    @endsection
+    @section('breadcrumb')
+        {{-- resources/views/home.blade.php --}}
+        {{ Breadcrumbs::render('profile-edit', $usname) }}
+    @endsection
 
-                    </div>
-                    <div class="profile-edit pt-3 mb-3">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-6 col-md-12">
-                                <form wire:submit.prevent="updateProfile" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Nama Lengkap</label>
+
+    <div>
+        <div class="p-2 mb-3">
+            <div class="d-block-lg w-100 mb-3  py-2">
+                <header class="header">
+                    <a href="{{ route('author.profile.about', Auth::user()->username) }}"
+                        class="btn btn-link text-dark text-decoration-none"><i class="fas fa-arrow-left"></i>
+                        Back</a>
+                </header>
+
+                <div class=" bg-white border-bottom">
+                    <div class="row pt-3 mb-3">
+                        <div class="col-lg-4 col-md-6">
+                            @if ($avatar)
+                                <img src="{{ $avatar->temporaryUrl() }}" width="250"
+                                    class="img-fluid rounded mb-3 px-3" alt="">
+                            @else
+                                <img src="{{ \Auth::user()->avatar ? asset('http://ngeblogid.test/storage/avatar/' . $avatarOrigin) : Gravatar::get('email@example.com', ['size' => 50]) }}"
+                                    width="250" class="img-fluid rounded-pill mb-3" alt="">
+                            @endif
+
+                        </div>
+                        <div class="col-lg-8 col-md-6">
+                            <form method="#" wire:submit.prevent="ProfileUpdate" enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-3 row px-3">
+                                    <label for="staticEmail" class="col-sm-3 col-form-label"> Name :</label>
+                                    <div class="col-sm-9">
                                         <input wire:model="name" type="text"
-                                            class="form-control @error('name') is-invalid @enderror" id="name">
-
-                                        @error('name')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                                            class="form-control @error('name')
+                                          is-invalid
+                                        @enderror"
+                                            id="staticEmail">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input wire:model="username" type="text"
-                                            class="form-control @error('username') is-invalid @enderror" id="username">
-
-                                        @error('username')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                                </div>
+                                <div class="mb-3 row px-3">
+                                    <label for="staticEmail" class="col-sm-3 col-form-label"> Username :</label>
+                                    <div class="col-sm-9">
+                                        <input wire:model="usname" type="text"
+                                            class="form-control @error('usname') is-invalid @enderror" id="staticEmail">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
+                                </div>
+                                <div class="mb-3 row px-3">
+                                    <label for="staticEmail" class="col-sm-3 col-form-label"> Email :</label>
+                                    <div class="col-sm-9">
                                         <input wire:model="email" type="text"
-                                            class="form-control  @error('email') is-invalid @enderror" id="email"
-                                            aria-describedby="emailHelp">
-                                        @error('email')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
+                                            class="form-control @error('email') is-invalid @enderror" id="staticEmail">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="formFile" class="form-label">Upload</label>
+                                </div>
+                                <div class="mb-3 row px-3">
+                                    <label for="staticEmail" class="col-sm-3 col-form-label"> Upload :</label>
+                                    <div class="col-sm-9">
                                         <input wire:model="avatar"
                                             class="form-control @error('avatar') is-invalid @enderror" type="file"
                                             id="formFile">
-                                        @error('avatar')
-                                            <span class="invalid-feedback">{{ $message }}</span>
-                                        @enderror
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="exampleFormControlTextarea1" class="form-label">Bio</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="8" cols="10" placeholder="-"></textarea>
+                                </div>
+                                <div class="mb-3 row px-3">
+                                    <label for="staticEmail" class="col-sm-3 col-form-label"> Bio :</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" cols="10"></textarea>
                                     </div>
-                                    <div class="d-flex justify-content-end pt-2">
-                                        <button type="submit" class="btn btn-dark">Perbarui</button>
-                                        <a href="{{ route('author.profile.index') }}"
-                                            class="btn btn-dark ms-1">Batalkan</a>
-                                    </div>
-
-                                </form>
-                            </div>
-
+                                </div>
+                                <div class="mb-3  px-3 d-flex justify-content-end">
+                                    <a href="{{ route('author.profile.about', Auth::user()->username) }}"
+                                        class=" btn btn-light rounded">Cancel</a>
+                                    <button type="submit" class=" btn btn-dark rounded ms-1">Edit Profile</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

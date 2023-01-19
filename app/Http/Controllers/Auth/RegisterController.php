@@ -70,7 +70,7 @@ class RegisterController extends Controller
       'updated_at'    => new \DateTime(),
     ]);
 
-    return redirect('/')
+    return redirect('/login')
       ->with('success', 'Success Register Your Account.');
   }
 }
