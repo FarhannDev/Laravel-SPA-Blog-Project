@@ -17,15 +17,15 @@ return new class extends Migration
     Schema::create('users', function (Blueprint $table) {
       $table->id();
       $table->string('name');
-      $table->string('username', 100)->unique();
+      $table->string('username', 100)->unique()->nullable();
       $table->string('email')->unique();
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password');
       $table->rememberToken();
 
       $table->string('avatar', 255)->nullable();
-      $table->string('uuid', 255);
-      $table->foreignId('user_type_id')->nullable()->onDelete('cascade');
+      $table->string('uuid', 255)->nullable();
+      // $table->foreignId('user_type_id')->nullable()->onDelete('cascade');
       $table->timestamps();
     });
   }

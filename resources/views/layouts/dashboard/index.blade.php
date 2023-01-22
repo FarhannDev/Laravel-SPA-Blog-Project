@@ -19,7 +19,7 @@
     <meta name="description" content="@yield('description')">
     <meta name="author" content="@yield('author')">
     <meta name="keyword" content="@yield('keyword')">
-    <title> @yield('page_title')</title>
+    <title> NgeBlogID - @yield('page_title')</title>
     <link rel="apple-touch-icon" sizes="57x57"
         href="{{ asset('dist/dashboard/' . 'assets/favicon/apple-icon-57x57.png') }}">
     <link rel="apple-touch-icon" sizes="60x60"
@@ -107,6 +107,213 @@
     <script src="{{ asset('dist/dashboard/' . 'vendors/simplebar/js/simplebar.min.js') }}"></script>
 
     @stack('javascript')
+
+    @guest
+        <!-- Modal:Login -->
+        <div class="modal fade" id="ngLoginModal" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
+            aria-labelledby="ngLoginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ngLoginModalLabel">NGEBLOGID - LOGIN</h5>
+                        <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row align-content-start mb-3">
+                            <div class="col">
+                                <h2>Login</h2>
+                            </div>
+                        </div>
+                        @if (session()->has('success'))
+                            <div class="auth-header__notification">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (session()->has('error'))
+                            <div class="auth-header__notification">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="row align-content-start">
+                            <div class="col-md-12">
+                                <form class="d-block-lg w-100" action="{{ route('login') }}" method="post">
+                                    @csrf
+                                    <div class="input-group mb-3"><span class="input-group-text">
+                                            <svg class="icon">
+                                                <use
+                                                    xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-user') }}">
+                                                </use>
+                                            </svg></span>
+                                        <input id="email" class="form-control @error('email') is-invalid @enderror"
+                                            name="email" value="{{ old('email') }}" required autocomplete="email"
+                                            type="email" placeholder="{{ __('Email Address') }}">
+                                        @error('email')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="input-group mb-4"><span class="input-group-text">
+                                            <svg class="icon">
+                                                <use
+                                                    xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-lock-locked') }}">
+                                                </use>
+                                            </svg></span>
+                                        <input id="password" type="password"
+                                            class="form-control @error('password') is-invalid @enderror" name="password"
+                                            required autocomplete="current-password" placeholder="{{ __('Password') }}">
+                                        @error('password')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class=" mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="remember"
+                                                id="remember" {{ old('remember') ? 'checked' : '' }} checked>
+
+                                            <label class="form-check-label" for="remember">
+                                                {{ __('Ingat Saya') }}
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+                                    <button type="submit" class="btn rounded px-4 d-block-lg w-100 text-white mb-3"
+                                        style="background-color: #101112;"> {{ __('Login') }}</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal:Register -->
+        <div class="modal fade" id="ngRegisterModal" data-coreui-backdrop="static" data-coreui-keyboard="false"
+            tabindex="-1" aria-labelledby="ngRegisterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ngRegisterModalLabel">NGEBLOGID - REGISTER</h5>
+                        <button type="button" class="btn-close" data-coreui-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row align-content-start mb-3">
+                            <div class="col">
+                                <h2>Register</h2>
+                            </div>
+                        </div>
+                        @if (session()->has('success'))
+                            <div class="auth-header__notification">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (session()->has('error'))
+                            <div class="auth-header__notification">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    {{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form method="POST" action="{{ route('register') }}" class="p-2">
+                                    @csrf
+                                    <div class="row g-3">
+                                        <div class="col-sm-12">
+                                            <label for="name" class="form-label">{{ __('Nama Anda') }}</label>
+                                            <input id="name" name="name" type="text"
+                                                class="form-control @error('name') is-invalid @enderror"
+                                                value="{{ old('name') }}" required autocomplete="name">
+                                            @error('name')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label for="username" class="form-label">{{ __('Username') }}</label>
+                                            <input type="text" name="username"
+                                                class="form-control  @error('username') is-invalid @enderror"
+                                                id="username" value="{{ old('username') }}" required
+                                                autocomplete="username" maxlength="14">
+                                            @error('username')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label for="email" class="form-label">Alamat Email</label>
+                                            <input type="email"
+                                                class="form-control  @error('email') is-invalid @enderror" id="email"
+                                                name="email" value="{{ old('email') }}" required
+                                                autocomplete="email">
+                                            @error('email')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label for="password" class="form-label">Password</label>
+                                            <input type="password" name="password"
+                                                class="form-control  @error('password') is-invalid @enderror"
+                                                id="password">
+                                            @error('password')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <label for="password_confirmation" class="form-label">Konfirmasi</label>
+                                            <input type="password" name="password_confirmation" class="form-control"
+                                                id="password_confirmation">
+                                        </div>
+                                    </div>
+                                    <div class="pt-3">
+                                        <button type="submit" class="btn btn-dark rounded-pill d-block-lg w-100">Daftar
+                                            Sekarang</button>
+                                        <br>
+                                        <div class="text-center pt-2">
+                                            <span class="d-inline text-dark">Atau</span>
+                                            <span class="d-block text-dark">
+                                                <a href="" class="btn btn-link text-dark text-decoration-none"><img
+                                                        src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
+                                                        width="50" alt="">Daftar Dengan Akun Google</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endguest
+
+
 
 </body>
 

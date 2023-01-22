@@ -10,14 +10,15 @@
         <div class="p-2">
             <div class="d-block-lg w-100 mb-3  py-2">
                 <header class="header">
-                    <h2 class="mx-3">{{ $user->name }}</h2>
+                    <h3 class="mx-3">My Profile</h3>
                 </header>
 
                 <div class=" bg-white border-bottom">
                     <div class="p-3">
                         <ul class="nav nav-underline">
                             <li class="nav-item">
-                                <a class="nav-link text-dark   " href="">Home </a>
+                                <a class="nav-link text-dark {{ Route::is('author.profile.index') ? 'text-decoration-underline' : '' }}"
+                                    href="">All Story </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark "
@@ -31,7 +32,7 @@
                     @foreach ($data as $index => $value)
                         <li class="list-group-item">
 
-                            <div class="row justify-content-between align-content-arround">
+                            <div class="row justify-content-between align-items-center">
                                 <div class="col-lg-8 col-sm-9 col-xs-9">
                                     <div class="posts px-md-3">
                                         <div class="post-title mb-2">
@@ -61,7 +62,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-3 col-xs-3">
-                                    <img src="{{ asset('storage/posts/' . $value->post_cover) }}"
+                                    <img src="{{ $value->post_cover ? asset('storage/story/' . $value->post_cover) : asset('images/default.png') }}"
                                         class="img-fluid rounded w-100">
                                 </div>
                             </div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -39,24 +41,35 @@ class LoginController extends Controller
     $this->middleware('guest')->except('logout');
   }
 
+  /**
+   * Create a new controller instance.
+   *
+   * @return void
+   */
   public function login(Request $request)
   {
-    $request->validate([
-      'email' => 'required|email|string',
-      'password' => 'required|string',
+    $credentials =  $request->validate([
+      'email' => 'required|string|email',
+      'password' => 'required|string'
     ]);
 
-    if (\Auth::attempt(['email' => $request['email'], 'password' => $request['password']])) {
-      if (\Auth::user()->type['type_name'] === 'admin') {
-        // return redirect('/');
-        return "Welcome Back Admin";
-      } else if (\Auth::user()->type['type_name'] === 'author') {
-        return redirect()->route('homepage.index');
+    $user = User::where('email', $request->email)->first();
+    $remember = $request->remember;
+
+    if (\Auth::attempt($credentials, $remember)) {
+      if ($user->hasRole('admin')) {
+        $request->session()->regenerate();
+        return redirect()->intended('dashboard');
       }
-    } else {
-      return redirect()
-        ->back()
-        ->with('error', 'Email-Address And Password Are Wrong.');
+
+      if ($user->hasRole('author')) {
+        $request->session()->regenerate();
+        return redirect()->intended('/');
+      }
+
+      return redirect()->back()->with('error', 'Sorry your login was not successful');
     }
+
+    return redirect()->back()->with('error', 'Password / Email Wrong.');
   }
 }

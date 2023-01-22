@@ -58,17 +58,18 @@ class RegisterController extends Controller
       'password' => ['required', 'string', 'min:8', 'confirmed'],
     ]);
 
-    User::create([
+    $user = User::create([
       'name'          => $request['name'],
       'username'      => '@' . \Str::slug($request['username'], '_'),
       'email'         => $request['email'],
       'password'      => \Hash::make($request['password']),
       'avatar'        => null,
-      'uuid'          => \Str::uuid(),
-      'user_type_id'  => 2,
+      'uuid'          => 'NGEBLOG-' . uniqid(),
       'created_at'    => new \DateTime(),
       'updated_at'    => new \DateTime(),
     ]);
+
+    $user->attachRole('author');
 
     return redirect('/login')
       ->with('success', 'Success Register Your Account.');

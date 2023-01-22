@@ -24,7 +24,7 @@
                                     class="img-fluid rounded mb-3 px-3" alt="">
                             @else
                                 <img src="{{ \Auth::user()->avatar ? asset('http://ngeblogid.test/storage/avatar/' . $avatarOrigin) : Gravatar::get('email@example.com', ['size' => 50]) }}"
-                                    width="250" class="img-fluid rounded-pill mb-3" alt="">
+                                    width="250" class="img-fluid rounded px-3 mb-3" alt="">
                             @endif
 
                         </div>

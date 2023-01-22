@@ -26,8 +26,8 @@ class StoriesIndex extends Component
   {
     $posts = Post::where('user_id', \Auth::user()->id)->findOrFail($id);
 
-    if (\File::exists('storage/posts/' . $posts->post_cover)) {
-      \File::delete('storage/posts/' . $posts->post_cover);
+    if (\File::exists('storage/story/' . $posts->post_cover)) {
+      \File::delete('storage/story/' . $posts->post_cover);
     };
     $posts->delete();
 
@@ -57,6 +57,7 @@ class StoriesIndex extends Component
         ->latest()
         ->get(),
       'posts_count' => Post::where('user_id', \Auth::user()->id)->count(),
+      'postsAdmin' => Post::orderBy('post_title', 'DESC')->latest()->paginate(10),
       'category' => PostCategory::all(),
     ])
       ->extends('layouts.dashboard.index')

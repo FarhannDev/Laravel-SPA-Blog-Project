@@ -1,5 +1,5 @@
     @section('page_title')
-        Your Stories
+        Postingan Saya
     @endsection
     @section('breadcrumb')
         {{-- resources/views/home.blade.php --}}
@@ -9,10 +9,9 @@
     <div>
         <div class="p-2">
             <header class="header">
-                <h5 class="mx-3">Your Stories</h5>
+                <h3 class="mx-3">Postingan Saya</h3>
                 <a data-turbolinks="false" href="{{ route('author.stories.add') }}" class="btn btn-dark rounded">Buat
                     Postingan
-                    Baru
                     <i class="fas fa-edit"></i></a>
             </header>
 
@@ -20,9 +19,6 @@
             <div class=" bg-white border-bottom">
                 <div class="p-3">
                     <ul class="nav nav-underline">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark " href="{{ route('author.bookmark.index') }}">Saved </a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark " href="{{ route('author.stories.drafts') }}">Draf </a>
                         </li>
@@ -33,7 +29,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark  " href="{{ route('author.stories.index') }}">All
+                            <a class="nav-link text-dark  " href="{{ route('author.stories.index') }}">Semua
                             </a>
                         </li>
                     </ul>
@@ -61,7 +57,7 @@
 
                                 </div>
                                 <div class="post-body">
-                                    {!! \Str::limit($post->post_description, 250, '...') !!}
+                                    {!! \Str::limit(strip_tags($post->post_description), '200') !!}
                                 </div>
                                 <div class="d-flex justify-content-arround py-3 mb-3">
                                     <button wire:click="deletePosts({{ $post->id }})" type="button"

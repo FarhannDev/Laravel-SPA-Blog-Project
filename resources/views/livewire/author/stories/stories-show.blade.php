@@ -16,6 +16,9 @@
     @endsection
 
     <div class="card shadow rounded bg-white mb-3">
+        <div class="card-header"> <a href="{{ route('author.stories.index') }}"
+                class="btn btn-link text-dark text-decoration-none p-2 mx-2"><i class="fas fa-arrow-left"></i>
+                Back</a></div>
         <div class="card-body">
             <div class="row justify-content-between">
                 <div class="col-lg-8">
@@ -41,7 +44,7 @@
                             </div>
                             <div class="post-image__cover mb-3 pt-3">
                                 <div class="ms-auto d-flex px-2 ">
-                                    <img src="{{ asset('/storage/posts/' . $stories_image) }}"
+                                    <img src="{{ $stories_image ? asset('storage/story/' . $stories_image) : asset('images/default.png') }}"
                                         class="rounded img-fluid w-100 ">
                                 </div>
 
@@ -52,19 +55,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="py-3">
-                        <h5>Tags</h5>
-                        <div class="row ">
-                            @foreach ($categories as $categori)
-                                <div class="col-auto mb-3">
-                                    <a href="" class="btn btn-light">{{ $categori->category_name }}</a>
-                                </div>
-                            @endforeach
-                        </div>
-                        <hr>
                     </div>
                 </div>
             </div>

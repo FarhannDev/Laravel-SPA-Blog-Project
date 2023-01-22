@@ -9,60 +9,54 @@
         </div>
         <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
             <li class="nav-title">APP MENU</li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('homepage.index') }}">
-                    <svg class="nav-icon">
-                        <use
-                            xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-home') }}">
-                        </use>
-                    </svg> Home</a></li>
-            <li class="nav-item"><a data-turbolinks="false"class="nav-link" href="{{ route('story.search') }}">
-                    <svg class="nav-icon">
-                        <use
-                            xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-search') }}">
-                        </use>
-                    </svg> Search</a></li>
-            @auth
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('author.stories.index') }}">
+
+            @role('admin')
+                <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-chart-line') }}">
+                            </use>
+                        </svg> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('homepage.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-home') }}">
+                            </use>
+                        </svg> Beranda</a></li>
+                <li class="nav-item"><a data-turbolinks="false"class="nav-link" href="{{ route('story.search') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-search') }}">
+                            </use>
+                        </svg> Cari</a></li>
+                <li class="nav-title">Stories Menu Management</li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('admin.stories.index') }}">
                         <svg class="nav-icon">
                             <use
                                 xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-notes') }}">
                             </use>
-                        </svg> Stories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('author.bookmark.index') }}">
+                        </svg> Stories</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('admin.categories.index') }}">
                         <svg class="nav-icon">
                             <use
-                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-bookmark') }}">
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-notes') }}">
                             </use>
-                        </svg> Bookmark</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0)">
-                        <svg class="nav-icon">
-                            <use
-                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-featured-playlist') }}">
-                            </use>
-                        </svg> Notes</a>
-                </li>
-                <li class="nav-item">
-
-                    <a class="nav-link" href="{{ route('author.profile.index', \Auth::user()->username) }}">
+                        </svg>Categories</a></li>
+                <li class="nav-title">User Menu Management</li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('admin.permission.index') }}">
                         <svg class="nav-icon">
                             <use
                                 xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-user') }}">
                             </use>
-                        </svg> Profile
-                    </a>
-                </li>
-
-                <li class="nav-item"><a class="nav-link" href="#" redirect_to>
+                        </svg> Permission</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('admin.role.index') }}">
                         <svg class="nav-icon">
                             <use
-                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-apps-settings') }}">
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-user') }}">
                             </use>
-                        </svg> Settings</a></li>
+                        </svg> Roles</a></li>
+
+                <hr>
                 <li class="nav-item"><a class="nav-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">
@@ -75,8 +69,78 @@
                         @csrf
                     </form>
                 </li>
+            @endrole
 
-            @endauth
+            @guest
+                <li class="nav-item"><a class="nav-link" href="{{ route('homepage.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-home') }}">
+                            </use>
+                        </svg> Home</a></li>
+                <li class="nav-item"><a data-turbolinks="false"class="nav-link" href="{{ route('story.search') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-search') }}">
+                            </use>
+                        </svg> Search</a></li>
+            @endguest
+
+            @role('author')
+                <li class="nav-item"><a class="nav-link" href="{{ route('homepage.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-home') }}">
+                            </use>
+                        </svg> Beranda</a></li>
+                <li class="nav-item"><a data-turbolinks="false"class="nav-link" href="{{ route('story.search') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-search') }}">
+                            </use>
+                        </svg> Cari</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('author.stories.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-notes') }}">
+                            </use>
+                        </svg> Postingan</a>
+                </li>
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{{ route('profile.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-user') }}">
+                            </use>
+                        </svg> Profile Saya
+                    </a>
+                </li>
+                <li class="nav-item">
+
+                    <a class="nav-link" href="{{ route('setting.index') }}">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-apps') }}">
+                            </use>
+                        </svg> Pengaturan
+                    </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();">
+                        <svg class="nav-icon">
+                            <use
+                                xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-account-logout') }}">
+                            </use>
+                        </svg> Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </li>
+            @endrole
+
 
 
 

@@ -16,49 +16,86 @@
 
     <div class="row ">
         <div class="col-md-12">
-            <div class="card bg-white" style="border-radius: 8px;">
+            <div class="card bg-white" style="border-radius: 8px;" id="story-{{ $stories_id }}">
                 <div class="row">
                     <div class="col">
-                        <a href="{{ route('homepage.index') }}"
-                            class="btn btn-link text-dark text-decoration-none p-2 mx-2"><i class="fas fa-arrow-left"></i>
-                            Back</a>
+                        <a href="{{ url('/beranda') }}" class="btn btn-link text-dark text-decoration-none p-2 mx-2"><i
+                                class="fas fa-arrow-left"></i>
+                            Kembali</a>
                     </div>
                 </div>
-                <div class="row justify-content-center align-content-end">
-                    <div class="col-lg-10">
-                        <div class="row flex-column g-3 p-3">
-                            <div class="col">
-                                <div class="d-flex flex-wrap mb-3">
-                                    <a href="#" class="btn btn-link m-0 p-0 text-decoration-none text-dark">
-                                        <div class="author-info">
-                                            <span><img src="{{ asset('storage/avatar/author-63c156869b047.jpg') }}"
-                                                    class="img-fluid rounded-circle" width="50">
-                                            </span>
-                                            <span class="author-info__name ms-2 text-capitalize ">
-                                                {{ $stories_publish_by }}
-                                                {{ $stories_publish }}
-                                            </span>
+                <div class="card-body">
+                    <div class="row align-content-start">
+                        <div class="col-lg-8">
+                            <div class="row align-content-start mb-3">
+                                <div class="col-lg-10 col-md-10">
+                                    <div class="d-block-lg w-100">
+                                        <div class="d-flex justify-content-start">
+                                            <div class="col-1">
+                                                <span class="d-inline">
+                                                    <a href="" class="text-dark text-decoration-none">
+                                                        <img src=" {{ $avatar ? asset('storage/avatar/' . $avatar) : Gravatar::get('email@example.com') }}"
+                                                            class="img-fluid rounded-circle" width="40">
+
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="col-lg-10">
+                                                <div class="d-flex flex-column">
+                                                    <span class="d-inline">
+                                                        <a href="" class="text-dark text-decoration-none">
+                                                            {{ $stories_publish_by }}
+                                                        </a>
+                                                    </span>
+                                                    <span class="d-inline text-capitalize">
+                                                        {{ date('d M Y', strtotime($stories_publish)) }}
+                                                    </span>
+                                                </div>
+
+                                            </div>
                                         </div>
 
-                                    </a>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <h3 class="text-dark fw-bolder px-2 mb-3"> {{ $stories_title }}</h3>
                                     </div>
                                 </div>
-                                <div class="d-flex px-2 mb-3">
-                                    <img src="{{ $stories_image }}" class="rounded img-fluid w-100 " height="250">
+                            </div>
+                            <div class="row align-content-start">
+                                <div class="col">
+                                    <img src="{{ $stories_image ? asset('storage/story/' . $stories_image) : asset('images/default.png') }}"
+                                        class="img-fluid w-100 rounded" alt="{{ $stories_title }}">
                                 </div>
-
-                                <div class="d-block-lg w-100 px-2">
+                            </div>
+                            <div class="row align-content-start">
+                                <div class="col-lg-10 col-md-10 ">
+                                    <h2 class="text-dark">{{ $stories_title }}</h2>
+                                </div>
+                            </div>
+                            <div class="row align-content-start">
+                                <div class="col ">
                                     {!! $stories_description !!}
                                 </div>
-
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="d-block-lg w-100 border">
+                                <h3 class="px-3 ">Rekomendasi Postingan</h3>
+                                <hr>
+                                <ul class="list-group list-group-flush">
+                                    @foreach ($latest as $index => $late)
+                                        <li class="list-group-item"><a
+                                                href="{{ route('story.detail', [$late->user['username'], $late->post_slug]) }}"
+                                                class="text-dark text-decoration-none">{{ \Str::limit($late->post_title, 50) }}
+                                            </a></li>
+                                    @endforeach
+                                </ul>
+                                <div class="text-center mb-3 mt-3">
+                                    <a href="" class="text-dark text-decoration-none ">Lihat semua
+                                        rekomendasi</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

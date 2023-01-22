@@ -15,29 +15,37 @@ class StoriesDetailHomepage extends Component
   public $stories_category;
   public $stories_publish_by;
   public $stories_publish;
-
+  public $avatar;
 
 
   public function mount($username, $story)
   {
-    $data = Post::with('user')->whereHas('user', function (Builder $query) use ($username) {
-      $query->where('username', $username);
-    })->where('post_slug', $story)->first();
+    try {
+      $data = Post::with('user')->whereHas('user', function (Builder $query) use ($username) {
+        $query->where('username', $username);
+      })->where('post_slug', $story)->first();
 
-    if ($data) {
-      $this->stories_id               = $data['id'];
-      $this->stories_title            = $data['post_title'];
-      $this->stories_description      = $data['post_description'];
-      $this->stories_image            = asset('storage/posts/' . $data['post_cover']);
-      $this->stories_category         = $data->category['category_name'];
-      $this->stories_publish_by       = $data['publish_by'];
-      $this->stories_publish          = date('M d Y', strtotime($data['publish_date']));
+      if ($data) {
+        $this->stories_id               = $data['id'];
+        $this->stories_title            = $data['post_title'];
+        $this->stories_description      = $data['post_description'];
+        $this->stories_image            = $data['post_cover'];
+        $this->stories_category         = $data->category['category_name'];
+        $this->stories_publish_by       = $data['publish_by'];
+        $this->stories_publish          = date('M d Y', strtotime($data['publish_date']));
+        $this->avatar                   = $data->user['avatar'];
+      }
+    } catch (\Exception $e) {
+      return $e->getMessage();
     }
   }
 
   public function render()
   {
-    return view('livewire.author.stories.stories-detail-homepage')
+    return view('livewire.author.stories.stories-detail-homepage', [
+
+      'latest' => Post::where('status', 'publish')->inRandomOrder()->limit(5)->get(),
+    ])
       ->extends('layouts.dashboard.index')
       ->section('content');
   }

@@ -10,6 +10,7 @@ use Livewire\WithFileUploads;
 
 class StoriesEdit extends Component
 {
+  use WithFileUploads;
   public $post_slug;
   public $post_title;
   public $post_categorie_id;
@@ -33,7 +34,7 @@ class StoriesEdit extends Component
       $this->post_categorie_id = $data->post_categorie_id;
       $this->post_description  = $data->post_description;
       $this->status            = $data->status;
-      $this->post_cover_original = asset('storage/posts/' . $data->post_cover);
+      $this->post_cover_original = asset('storage/story/' . $data->post_cover);
       $this->userId             = $data->id;
     }
   }
@@ -68,13 +69,14 @@ class StoriesEdit extends Component
       $cover = null;
 
       if ($this->post_cover) {
-        \File::exists('storage/posts/' . $posts->post_cover);
-        \File::delete('storage/posts/' . $posts->post_cover);
+        \File::exists('storage/story/' . $posts->post_cover);
+        \File::delete('storage/story/' . $posts->post_cover);
 
-        $extension = $this->post_cover->getClientOriginalExtension();
-        $filename = \Str::slug($this->post_title, '-') . '-' . uniqid() . '.' . $extension;
+        $extension = '.png';
+        $filename = 'story-' . uniqid()  . $extension;
+
         // store image to storage
-        $this->post_cover->storeAs('public/posts', $filename);
+        $this->post_cover->storeAs('public/story', $filename);
         $cover = $filename;
       } else {
         $cover = $posts['post_cover'];

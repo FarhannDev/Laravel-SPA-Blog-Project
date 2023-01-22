@@ -16,7 +16,7 @@
 <div>
     <div class="p-2">
         <header class="header">
-            <h3 class="mx-3">New Story</h3>
+            <h3 class="mx-3">Postingan Baru</h3>
         </header>
         <div class="d-block-lg w-100 bg-white p-3">
 
@@ -47,7 +47,7 @@
                                 <span class="invalid-feedback">{{ $message }} </span>
                             @enderror
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="status" class="form-label">Status Postingan</label>
                             <select wire:model="status" class="form-select @error('status')is-invalid @enderror">
                                 <option value="" selected>Pilih Status Postingan</option>
@@ -58,7 +58,7 @@
                             @error('status')
                                 <span class="invalid-feedback">{{ $message }} </span>
                             @enderror
-                        </div>
+                        </div> --}}
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Upload Thumbnail</label>
                             <input wire:model="post_cover"

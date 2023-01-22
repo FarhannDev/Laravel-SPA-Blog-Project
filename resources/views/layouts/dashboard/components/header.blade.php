@@ -12,7 +12,7 @@
                    @auth
                        <li class="nav-item">
                            <a class="nav-link" href="{{ route('author.stories.add') }}" data-turbolinks="false">
-                               <span class="ms-2"><i class="fa fa-edit" style="font-size:22px"></i> New Story</span>
+                               <span class="ms-2"><i class="fa fa-edit" style="font-size:22px"></i> Buat Postingan</span>
                            </a>
                        </li>
                        <li class="nav-item">
@@ -37,12 +37,12 @@
                                </div>
                            </a>
                            <div class="dropdown-menu dropdown-menu-end pt-0">
-                               <a class="dropdown-item" href="{{ route('author.profile.index', \Auth::user()->username) }}">
+                               <a class="dropdown-item" href="{{ route('profile.index') }}">
                                    <svg class="icon me-2">
                                        <use
                                            xlink:href="{{ asset('dist/dashboard/' . 'vendors/@coreui/icons/svg/free.svg#cil-user') }}">
                                        </use>
-                                   </svg> Profile</a>
+                                   </svg> Profile Saya</a>
 
 
                                <a class="dropdown-item" href="{{ route('logout') }}"
@@ -60,10 +60,12 @@
                            </div>
                        @else
                            <div class="d-flex flex-wrap">
-                               <a class="nav-link py-0 text-dark fw-normal" href="{{ route('login') }}">
+                               <a href="#" class="nav-link py-0 text-dark fw-normal" data-coreui-toggle="modal"
+                                   data-coreui-target="#ngLoginModal">
                                    Login
                                </a>
-                               <a href="{{ route('register') }}" class="nav-link py-0 text-dark fw-normal">
+                               <a href="#" data-coreui-toggle="modal" data-coreui-target="#ngRegisterModal"
+                                   class="nav-link py-0 text-dark fw-normal">
                                    Register
                                </a>
                            </div>

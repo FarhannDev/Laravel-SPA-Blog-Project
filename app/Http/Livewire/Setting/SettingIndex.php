@@ -28,7 +28,7 @@ class SettingIndex extends Component
     'name'        => 'required|string|min:3|max:100',
     'email'       => 'required|string|email',
     'username'    => 'required|string|max:14',
-    'avatar'      => 'image|mimes:jpeg,jpg,png|max:2048'
+    'avatar'      => 'nullable|image|mimes:jpeg,jpg,png|max:2048'
   ];
 
   public function updated($propertyName)
@@ -69,18 +69,15 @@ class SettingIndex extends Component
     }
 
     $user->update([
-      'uuid' => $this->uuid,
-      'name' => $this->name,
-      'username' => $this->username,
-      'email' => $this->email,
-      'avatar' => $user_avatar,
+      'uuid'       => $this->uuid,
+      'name'       => $this->name,
+      'username'   => $this->username,
+      'email'      => $this->email,
+      'avatar'     => $user_avatar,
       'updated_at' => new \DateTime()
     ]);
 
-
-    return redirect()
-      ->route('settings.index')
-      ->with('success', ' Profile updated successfully');
+    session()->flash('success', ' Profil berhasil diperbarui.');
   }
   public function updatePassword()
   {
@@ -100,14 +97,22 @@ class SettingIndex extends Component
         'updated_at' => new \DateTime(),
       ]);
 
-      return redirect()
-        ->route('settings.index')
-        ->with('success', 'Password berhasil diubah.');
+      session()->flash('success', 'Password berhasil diubah.');
     }
 
     session()->flash('password_salah', 'Password tidak sesuai!!');
   }
 
+
+  public function removeAccount()
+  {
+    $user = User::where('id', $this->userId)->first();
+    $user->delete();
+
+    return redirect()
+      ->route('login')
+      ->with('success', 'Berhasil menghapus akun.');
+  }
 
   public function render()
   {

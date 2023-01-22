@@ -13,8 +13,8 @@ class StoriesPublish extends Component
   {
     $posts = Post::where('user_id', \Auth::user()->id)->findOrFail($id);
 
-    if (\File::exists('storage/posts/' . $posts->post_cover)) {
-      \File::delete('storage/posts/' . $posts->post_cover);
+    if (\File::exists('storage/story/' . $posts->post_cover)) {
+      \File::delete('storage/story/' . $posts->post_cover);
     };
     $posts->delete();
 
