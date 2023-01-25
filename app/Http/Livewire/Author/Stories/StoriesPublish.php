@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Author\Stories;
 
 use App\Models\Post;
 use App\Models\PostCategory;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class StoriesPublish extends Component
@@ -26,12 +27,16 @@ class StoriesPublish extends Component
 
   public function render()
   {
-    return view('livewire.author.stories.stories-publish', [
-      'posts' => Post::where('user_id', \Auth::user()->id)
+    $data = Cache::remember('posts.publish', now()->addMinutes(120), function () {
+      return Post::where('user_id', \Auth::user()->id)
         ->with('category')
         ->where('status', 'publish')
         ->orderBy('publish_date', 'DESC')
-        ->paginate(20),
+        ->paginate(20);
+    });
+
+    return view('livewire.author.stories.stories-publish', [
+      'posts' => $data,
       'posts_count' => Post::where('user_id', \Auth::user()->id)->where('status', 'publish')->count(),
       'category' => PostCategory::all(),
     ])

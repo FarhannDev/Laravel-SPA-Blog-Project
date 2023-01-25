@@ -15,21 +15,25 @@ class StoriesSearch extends Component
     'query' => ['except' => ''],
   ];
 
+
+  protected function searchResultStories()
+  {
+    $data = Post::with('category')->when($this->query, function (Builder $query) {
+      $query->where('post_title', 'like', '%' . trim($this->query) . '%');
+      $query->where('status', 'publish');
+    })->when($this->category, function (Builder $query) {
+      $query->whereHas('category', function (Builder $q) {
+        $q->where('category_name', $this->category);
+      });
+    })->latest()->paginate(20);
+
+    return $data;
+  }
+
   public function render()
   {
-    $data = Post::with('category')
-      ->when($this->query, function (Builder $query) {
-        $query->where('post_title', 'like', '%' . trim($this->query) . '%');
-        $query->where('status', 'publish');
-      })
-      ->when($this->category, function (Builder $query) {
-        $query->whereHas('category', function (Builder $q) {
-          $q->where('category_name', $this->category);
-        });
-      })->latest()->paginate(20);
-
     return view('livewire.author.stories.stories-search', [
-      'posts' => $data,
+      'posts' => $this->searchResultStories(),
       'categories' => PostCategory::all(),
     ])
       ->extends('layouts.dashboard.index')

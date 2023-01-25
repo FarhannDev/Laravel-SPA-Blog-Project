@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Livewire\WithPagination;
 
 class StoriesIndex extends Component
@@ -36,28 +37,28 @@ class StoriesIndex extends Component
       ->with('success', 'Success Delete Story');
   }
 
-
-  public function render()
+  protected function getAllStoriesByUser()
   {
-    $data = Post::when($this->search, function (Builder $query) {
-      $query->where('post_title', 'like', '%' . trim($this->search) . '%');
-    })
-      ->when($this->status, function (Builder $query) {
+    $stories = \Cache::remember('stories.all', now()->addMinutes(120), function () {
+      return Post::when($this->search, function (Builder $query) {
+        $query->where('post_title', 'like', '%' . trim($this->search) . '%');
+      })->when($this->status, function (Builder $query) {
         $query->where('status', $this->status);
-      })
-      ->when($this->category_select, function (Builder $query) {
+      })->when($this->category_select, function (Builder $query) {
         $query->whereHas('category', function (Builder $q) {
           $q->where('category_name', 'like', '%' . trim($this->category_select) . '%');
         });
       })->where('user_id', \Auth::user()->id)->with('category')->latest()->get();
+    });
 
+    return $stories;
+  }
+
+  public function render()
+  {
     return view('livewire.author.stories.stories-index', [
-      'posts' => Post::where('user_id', \Auth::user()->id)
-        ->with('category')
-        ->latest()
-        ->get(),
+      'posts' => $this->getAllStoriesByUser(),
       'posts_count' => Post::where('user_id', \Auth::user()->id)->count(),
-      'postsAdmin' => Post::orderBy('post_title', 'DESC')->latest()->paginate(10),
       'category' => PostCategory::all(),
     ])
       ->extends('layouts.dashboard.index')
