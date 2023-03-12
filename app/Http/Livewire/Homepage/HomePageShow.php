@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Homepage;
 
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Component;
 
 class HomePageShow extends Component
@@ -17,11 +18,11 @@ class HomePageShow extends Component
 
   public function mount($username, $slug)
   {
-    $data = Post::with('user')
-      ->whereHas('user', function (Builder $query) use ($username) {
+    $data = Cache::remember('posts.detail', now()->addMinutes(120), function () use ($username, $slug) {
+      return Post::with('user')->whereHas('user', function (Builder $query) use ($username) {
         $query->where('username', $username);
-      })
-      ->where('post_slug', $slug)->first();
+      })->where('post_slug', $slug)->first();
+    });
 
     if ($data) {
       $this->stories_id           = $data['id'];

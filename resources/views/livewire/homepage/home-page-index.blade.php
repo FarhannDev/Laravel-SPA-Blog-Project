@@ -1,107 +1,119 @@
 <div>
     @section('page_title')
-        NgeBlogID
+        {{ $page_title }}
+    @endsection
+    @section('breadcrumb')
+        {{-- resources/views/home.blade.php --}}
+        {{ Breadcrumbs::render('home') }}
     @endsection
 
-    <div class="p-2">
+    <div class="p-3 bg-white rounded">
+        <header class="header">
+            <h3 class="mx-3 mb-3">{{ __('Semua Postingan') }}</h3>
+        </header>
 
-        <div class="d-block-lg w-100 mb-3  py-2 bg-white">
-            <header class="header">
-                <h4 class="mx-3">Semua Daftar Postingan</h4>
-            </header>
-            @if (session()->has('success'))
-                <div class="auth-header__notification">
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
 
-            <div class="row justify-content-end py-3 px-3 mb-3">
-                <div class="col-lg-4">
-                    <div class=" mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Cari Postingan</label>
-                        <input wire:model.debounce.500ms='search' type="text" class="form-control"
-                            placeholder="Cari postingan" aria-label="Cari postingan" aria-describedby="button-addon2">
-                    </div>
-                </div>
+        <div class="row align-content-start justify-content-arround pt-3">
+            <div class="col-lg-8">
+                <div class="d-block-lg w-100">
 
-                <div class="col-lg-4">
-                    <div class=" mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Cari Berdasarkan Kategori</label>
-                        <select wire:model.debounce.300ms="category" wire:ignore.self class="form-select"
-                            aria-label="Default select example">
-                            <option selected value="">Pilih Semua Kategori</option>
-                            @foreach ($category_posts as $cat)
-                                <option value="{{ $cat->category_name }}">{{ $cat->category_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class=" mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Cari Berdasarkan Tanggal</label>
-                        <input wire:model="publish" type="date" class="form-control" placeholder="Cari postingan"
-                            aria-label="Cari postingan" aria-describedby="button-addon2">
-                    </div>
-                </div>
-
-            </div>
-
-            <ul class="list-group list-group-flush mb-3">
-                @foreach ($posts as $index => $post)
-                    <li class="list-group-item">
-
-                        <div class="row justify-content-between align-content-around ">
-                            <div class="col-lg-8 col-sm-9 col-xs-9">
-                                <div class="posts px-md-2">
-                                    <div class="post-title mb-2">
-                                        <div class="d-flex flex-wrap">
-                                            <a href="#"
-                                                class="btn btn-link m-0 p-0 text-decoration-none text-dark">
-                                                <div class="author-info">
-                                                    <span><img
-                                                            src="{{ asset('storage/avatar/' . $post->user['avatar']) }}"
-                                                            class="img-fluid rounded-circle" width="30">
-                                                    </span>
-                                                    <span class="author-info__name ms-2 text-capitalize ">
-                                                        {{ $post->publish_by }}
-                                                        <span class="fw-bolder">
-                                                            {{ \Carbon\Carbon::parse($post->publish_date)->diffForHumans() }}</span>
-                                                    </span>
-
-                                                </div>
-                                            </a>
+                    @foreach ($posts as $index => $post)
+                        <div class="card rounded mb-3" id="story-{{ $post->id }}">
+                            <a href="{{ route('story.detail', [$post->user['username'], $post->post_slug]) }}">
+                                <img src="{{ $post->post_cover ? asset('storage/story/' . $post->post_cover) : asset('images/default.png') }}"
+                                    class="img-fluid rounded w-100">
+                            </a>
+                            <div class="card-body">
+                                <div class="row align-content-end justify-content-end">
+                                    <div class="col">
+                                        <div class="text-end">
+                                            <button type="button"
+                                                class="btn btn-sm btn-light rounded-pill">{{ $post->category['category_name'] }}</button>
 
                                         </div>
-                                        <h4 class="card-title mx-2 pt-3"><a
-                                                href="{{ route('stories.show', [$post->user['username'], $post->post_slug]) }}"
-                                                class="text-dark fw-bolder ">
-                                                {{ \Str::ucfirst($post->post_title) }}</a></h4>
                                     </div>
-                                    <div class="post-body mb-3 mx-2">
-                                        {!! \Str::limit($post->post_description, 250, '...') !!}
+                                </div>
+                                <div class="row align-content-start">
+                                    <div class="col-lg-10 col-md-10">
+                                        <h3 class="text-dark"> <a
+                                                href="{{ route('story.detail', [$post->user['username'], $post->post_slug]) }}"
+                                                class="text-dark">{{ \Str::limit($post->post_title, 50) }}</a></h3>
                                     </div>
-                                    <div class="d-flex justify-content-arround align-items-center py-3 mb-3">
-                                        <a href=""
-                                            class="btn btn-light btn-sm rounded-pill">{{ $post->category['category_name'] }}</a>
-                                        <span class="ms-2">2 Min Read</span>
+                                </div>
+                                <div class="row align-content-start">
+                                    <div class="col-lg-10 col-md-10">
+                                        {!! \Str::limit(strip_tags($post->post_description), '200') !!}
+                                    </div>
+                                </div>
+                                <div class="row align-content-start py-3">
+                                    <div class="col-lg-10 col-md-10">
+                                        <div class="d-block-lg w-100">
+                                            <div class="d-flex justify-content-start">
+                                                <div class="col-1">
+                                                    <span class="d-inline">
+                                                        <a href="" class="text-dark text-decoration-none">
+                                                            <img src=" {{ $post->user->avatar ? asset('storage/avatar/' . $post->user->avatar) : Gravatar::get('email@example.com') }}"
+                                                                class="img-fluid rounded-circle" width="40">
 
-                                    </div>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="col-lg-10">
+                                                    <div class="d-flex flex-column">
+                                                        <span class="d-inline">
+                                                            <a href="{{ route('author.profile.public', $post->user->username) }}"
+                                                                class="text-dark text-decoration-none">
+                                                                {{ $post->publish_by }}
+                                                            </a>
+                                                        </span>
+                                                        <span class="d-inline text-capitalize">
+                                                            {{ date('d M Y', strtotime($post->publish_date)) }}
+                                                        </span>
+                                                    </div>
 
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-sm-3 col-xs-3 my-1  ">
-                                <img src="{{ asset('storage/posts/' . $post->post_cover) }}"
-                                    class="img-fluid rounded w-100">
-                            </div>
                         </div>
-
-                    </li>
-                @endforeach
-            </ul>
+                    @endforeach
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="d-block-lg w-100 rounded border mb-3">
+                    <h3 class="px-3 ">Kategori</h3>
+                    <hr>
+                    <ul class="list-group list-group-flush">
+                        @foreach ($category_posts as $index => $category)
+                            <li class="list-group-item"><a href=""
+                                    class="text-dark text-decoration-none">{{ $category->category_name }}
+                                    (0)
+                                </a></li>
+                        @endforeach
+                    </ul>
+                    <div class="text-center mb-3 mt-3">
+                        <a href="" class="text-dark text-decoration-none ">Lihat Semua Kategori</a>
+                    </div>
+                </div>
+                <div class="d-block-lg w-100 border rounded">
+                    <h3 class="px-3 ">Rekomendasi Postingan </h3>
+                    <hr>
+                    <ul class="list-group list-group-flush">
+                        @foreach ($latest as $index => $late)
+                            <li class="list-group-item"><a
+                                    href="{{ route('story.detail', [$late->user['username'], $late->post_slug]) }}"
+                                    class="text-dark text-decoration-none">{{ \Str::limit($late->post_title, 50) }}
+                                </a></li>
+                        @endforeach
+                    </ul>
+                    <div class="text-center mb-3 mt-3">
+                        <a href="" class="text-dark text-decoration-none ">Lihat Semua Rekomendasi</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
 </div>
